@@ -36,23 +36,20 @@ class LinkDraw:
             response = requests.get(url, headers=self.__headers)
             items = json.loads(response.text)["data"]["items"]
             for elem in items:
-                try:
-                    self.__checkAttri(elem["item"]["doc_id"])
-                except:
-                    pass
+                self.__checkAttri(elem["item"]["doc_id"])
                 time.sleep(1)
 
     def __checkAttri(self, doc_id):
         url = self.__url_detail.format(doc_id)
         response = requests.get(url, headers=self.__headers)
+        if response.status_code != 200: return
         content = json.loads(response.text)["data"]
-        print(response.status_code)
         user = content["user"]
         item = content["item"]
 
         for flag, value in self.__check_flag.items():
             if item[flag] < value:
-                print("× 用户 {} 的 {} 不存在需求 LinkDraw！".format(user["name"], item["title"]))
+                print("× 用户 {} 的 {} 不符合需求 LinkDraw！".format(user["name"], item["title"]))
                 return
 
         print("√ 正在获取 {} 的 {} LinkDraw！".format(user["name"], item["title"]))
@@ -64,4 +61,5 @@ class LinkDraw:
             with open(path, 'bw') as f:
                 f.write(img.content)
             self.__downCount += 1
+            time.sleep(0.5)
         print("\t操作完成，共获取 {} 张！".format(len(item["pictures"])))

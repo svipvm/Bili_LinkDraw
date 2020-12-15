@@ -5,9 +5,9 @@ if __name__ == '__main__':
     spider.set_range_page(20)
     flag = {
         "view_count": 100000,
-        "collect_count": 100,
+        "collect_count": 0,
         "vote_count": 0,
-        "comment_count": 10
+        "comment_count": 0
     }
     spider.set_check_flag(flag)
     spider.run()
