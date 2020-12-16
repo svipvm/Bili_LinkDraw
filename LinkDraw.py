@@ -37,7 +37,7 @@ class LinkDraw:
         if not os.path.exists(self.__file_path):
             os.mkdir(self.__file_path)
         for page in range(self.__range_page):
-            url = self.__url_list.format(page)
+            url = self.__url_list[self.__kind].format(page)
             response = requests.get(url, headers=self.__headers)
             items = json.loads(response.text)["data"]["items"]
             for elem in items:
@@ -53,8 +53,10 @@ class LinkDraw:
         item = content["item"]
 
         for flag, value in self.__check_flag.items():
-            if item[flag] < value:
-                print("× 用户 {} 的 {} 不符合需求 LinkDraw！".format(user["name"], item["title"]))
+            try:
+                if item[flag] < value:
+                    raise Exception("× 用户 {} 的 {} 不符合需求 LinkDraw！".format(user["name"], item["title"]))
+            except:
                 return
 
         print("√ 正在获取 {} 的 {} LinkDraw！".format(user["name"], item["title"]))
