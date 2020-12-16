@@ -6,8 +6,10 @@ class LinkDraw:
         self.__headers = {
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
-        self.__url_list = "https://api.vc.bilibili.com/link_draw/v2/Doc/list?category=all&type=hot&page_num={}&page_size=20"
+        self.__url_list = ["https://api.vc.bilibili.com/link_draw/v2/Doc/index?type=recommend&page_num={}&page_size=45",
+                           "https://api.vc.bilibili.com/link_draw/v2/Doc/list?category=all&type=hot&page_num={}&page_size=20"]
         self.__url_detail = "https://api.vc.bilibili.com/link_draw/v1/doc/detail?doc_id={}"
+        self.__kind = 0
         self.__range_page = 5
         self.__downCount = 0
         self.__file_path = ""
@@ -18,6 +20,9 @@ class LinkDraw:
             "vote_count": 0,
             "comment_count": 0
         }
+
+    def set_kind(self, value):
+        self.__kind = value
 
     def set_range_page(self, value):
         self.__range_page = value
