@@ -1,4 +1,4 @@
-import requests, json, datetime, os, time
+import requests, json, datetime, os, time, sys
 
 class LinkDraw:
 
@@ -7,7 +7,8 @@ class LinkDraw:
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
         self.__url_list = ["https://api.vc.bilibili.com/link_draw/v2/Doc/index?type=recommend&page_num={}&page_size=45",
-                           "https://api.vc.bilibili.com/link_draw/v2/Doc/list?category=all&type=hot&page_num={}&page_size=20"]
+                           "https://api.vc.bilibili.com/link_draw/v2/Doc/index?type=hot&page_num={}&page_size=45",
+                           "https://api.vc.bilibili.com/link_draw/v2/Doc/index?type=new&page_num={}&page_size=45"]
         self.__url_detail = "https://api.vc.bilibili.com/link_draw/v1/doc/detail?doc_id={}"
         self.__kind = 0
         self.__range_page = 5
@@ -47,7 +48,7 @@ class LinkDraw:
     def __checkAttri(self, doc_id):
         url = self.__url_detail.format(doc_id)
         response = requests.get(url, headers=self.__headers)
-        if response.status_code != 200: return
+        if response.status_code != 200: sys.exit()
         content = json.loads(response.text)["data"]
         user = content["user"]
         item = content["item"]
@@ -56,7 +57,8 @@ class LinkDraw:
             try:
                 if item[flag] < value:
                     raise Exception("× 用户 {} 的 {} 不符合需求 LinkDraw！".format(user["name"], item["title"]))
-            except:
+            except Exception as e:
+                print(e)
                 return
 
         print("√ 正在获取 {} 的 {} LinkDraw！".format(user["name"], item["title"]))
